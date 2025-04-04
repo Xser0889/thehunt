@@ -139,56 +139,56 @@
     </div>
 
     <!-- Leaderboard Modal -->
-    <div 
-        id="leaderboardModal" 
-        class="hidden fixed inset-0 bg-black/70 z-80 flex items-center justify-center"
-    >
-        <div class="bg-white p-8 rounded-2xl shadow-2xl border-4 border-green-600 
-                    w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-4xl font-['Bangers'] text-green-600">🏆 Leaderboard 🏆</h2>
-                <div class="flex space-x-2">
-                    <button 
-                        id="refreshLeaderboard" 
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg 
-                               hover:bg-blue-600 transition-colors duration-300"
-                    >
-                        🔄 Refresh
-                    </button>
-                    <button 
-                        id="closeLeaderboard" 
-                        class="px-6 py-2 bg-gray-500 text-white rounded-lg 
-                               hover:bg-gray-600 transition-colors duration-300"
-                    >
-                        Close
-                    </button>
-                </div>
-            </div>
-            
-            <div id="leaderboardLoading" class="text-center py-8">
-                Loading leaderboard data...
-            </div>
-            
-            <div id="leaderboardError" class="hidden text-center py-8 text-red-500">
-                Error loading leaderboard data. Please try again.
-            </div>
-            
-            <div id="leaderboardContent" class="hidden">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-green-100">
-                            <th class="p-2 text-left border border-green-200">#</th>
-                            <th class="p-2 text-left border border-green-200">Name</th>
-                            <th class="p-2 text-left border border-green-200">Date & Time</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardBody">
-                        <!-- Leaderboard entries will be inserted here -->
-                    </tbody>
-                </table>
+<div 
+    id="leaderboardModal" 
+    class="hidden fixed inset-0 bg-black/70 z-80 flex items-center justify-center"
+>
+    <div class="bg-white p-8 rounded-2xl shadow-2xl border-4 border-green-600 
+                w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto leaderboard-content">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-4xl font-['Bangers'] text-green-600">🏆 Leaderboard 🏆</h2>
+            <div class="flex space-x-2">
+                <button 
+                    id="refreshLeaderboard" 
+                    class="px-4 py-2 bg-blue-500 text-white rounded-lg 
+                           hover:bg-blue-600 transition-colors duration-300"
+                >
+                    🔄 Refresh
+                </button>
+                <button 
+                    id="closeLeaderboard" 
+                    class="px-6 py-2 bg-gray-500 text-white rounded-lg 
+                           hover:bg-gray-600 transition-colors duration-300"
+                >
+                    Close
+                </button>
             </div>
         </div>
+        
+        <div id="leaderboardLoading" class="text-center py-8">
+            Loading leaderboard data...
+        </div>
+        
+        <div id="leaderboardError" class="hidden text-center py-8 text-red-500">
+            Error loading leaderboard data. Please try again.
+        </div>
+        
+        <div id="leaderboardContent" class="hidden">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-green-100">
+                        <th class="p-2 text-left border border-green-200">#</th>
+                        <th class="p-2 text-left border border-green-200">Name</th>
+                        <th class="p-2 text-left border border-green-200">Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Leaderboard entries will be inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
 
     <script src="script.js"></script>
 </body>
