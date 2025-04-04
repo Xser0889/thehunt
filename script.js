@@ -73,11 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showCompletedView();
     }
     
-    // Add the leaderboard modal animation class
-    const leaderboardModalContent = leaderboardModal.querySelector('div');
-    if (leaderboardModalContent) {
-        leaderboardModalContent.classList.add('leaderboard-content');
-    }
+    // Add the leaderboard modal animation clas
 });
 
 // Track correct passwords
@@ -288,14 +284,14 @@ async function submitToGoogleSheets(username, timestamp) {
     }
 }
 
-// Leaderboard animations
+// Update the openLeaderboard function:
 function openLeaderboard() {
     // First make it visible but with 0 opacity
     leaderboardModal.style.display = 'flex';
     leaderboardModal.style.opacity = '0';
     
-    // Get the leaderboard content element
-    const leaderboardContent = leaderboardModal.querySelector('div');
+    // Get the leaderboard content element using the class
+    const leaderboardContent = leaderboardModal.querySelector('.leaderboard-content');
     if (leaderboardContent) {
         leaderboardContent.style.transform = 'scale(0.8) translateY(-50px)';
         leaderboardContent.style.opacity = '0';
@@ -315,9 +311,10 @@ function openLeaderboard() {
     }, 50);
 }
 
+// Update the closeLeaderboardWithAnimation function:
 function closeLeaderboardWithAnimation() {
-    // Get the leaderboard content element
-    const leaderboardContent = leaderboardModal.querySelector('div');
+    // Get the leaderboard content element using the class
+    const leaderboardContent = leaderboardModal.querySelector('.leaderboard-content');
     
     // First animate the content bouncing out
     if (leaderboardContent) {
