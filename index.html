@@ -147,13 +147,22 @@
                     w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-4xl font-['Bangers'] text-green-600">🏆 Leaderboard 🏆</h2>
-                <button 
-                    id="refreshLeaderboard" 
-                    class="px-4 py-2 bg-blue-500 text-white rounded-lg 
-                           hover:bg-blue-600 transition-colors duration-300"
-                >
-                    🔄 Refresh
-                </button>
+                <div class="flex space-x-2">
+                    <button 
+                        id="refreshLeaderboard" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg 
+                               hover:bg-blue-600 transition-colors duration-300"
+                    >
+                        🔄 Refresh
+                    </button>
+                    <button 
+                        id="closeLeaderboard" 
+                        class="px-6 py-2 bg-gray-500 text-white rounded-lg 
+                               hover:bg-gray-600 transition-colors duration-300"
+                    >
+                        Close
+                    </button>
+                </div>
             </div>
             
             <div id="leaderboardLoading" class="text-center py-8">
@@ -177,16 +186,6 @@
                         <!-- Leaderboard entries will be inserted here -->
                     </tbody>
                 </table>
-            </div>
-            
-            <div class="text-center mt-6">
-                <button 
-                    id="closeLeaderboard" 
-                    class="px-6 py-2 bg-gray-500 text-white rounded-lg 
-                           hover:bg-gray-600 transition-colors duration-300"
-                >
-                    Close
-                </button>
             </div>
         </div>
     </div>
