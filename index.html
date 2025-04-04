@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Great Pizza Hunt Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="animated-gradient flex items-center justify-center min-h-screen">
+    <div class="text-center w-full max-w-md">
+        <div class="bg-white/80 backdrop-blur-sm border-4 border-green-600 rounded-xl mb-8 p-2">
+            <h1 class="text-6xl font-['Bangers'] text-green-600 tracking-wider flex items-center justify-center">
+                <span class="text-5xl mr-2">🍕</span>
+                <span>The Great Pizza Hunt Challenge</span>
+                <span class="text-5xl ml-2">🍕</span>
+            </h1>
+            
+            <!-- Leaderboard Toggle Button -->
+            <button 
+                id="leaderboardToggle" 
+                class="mt-2 px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 
+                       transition-colors duration-300 font-bold text-sm"
+            >
+                View Leaderboard
+            </button>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border-4 border-green-600 relative overflow-hidden">
+            <!-- Username Input -->
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-bold text-gray-700">Your Name:</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    class="w-full border-2 border-gray-300 p-3 rounded-lg 
+                           focus:outline-none focus:ring-2 focus:ring-green-400 
+                           font-['Courier_Prime'] text-lg transition-all duration-300
+                           hover:scale-105"
+                    placeholder="Enter your name"
+                >
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex items-center">
+                    <div class="flex-grow">
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Password 1:</label>
+                        <div class="flex items-center">
+                            <input 
+                                type="text" 
+                                id="password1" 
+                                class="w-full border-2 border-gray-300 p-3 rounded-lg 
+                                       focus:outline-none focus:ring-2 focus:ring-green-400 
+                                       font-['Courier_Prime'] text-lg transition-all duration-300
+                                       hover:scale-105"
+                                placeholder="Enter first password"
+                            >
+                            <div 
+                                id="light1" 
+                                class="ml-4 w-8 h-8 rounded-full bg-red-500 transition-all duration-300 shadow-md"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="flex-grow">
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Password 2:</label>
+                        <div class="flex items-center">
+                            <input 
+                                type="text" 
+                                id="password2" 
+                                class="w-full border-2 border-gray-300 p-3 rounded-lg 
+                                       focus:outline-none focus:ring-2 focus:ring-green-400 
+                                       font-['Courier_Prime'] text-lg transition-all duration-300
+                                       hover:scale-105"
+                                placeholder="Enter second password"
+                            >
+                            <div 
+                                id="light2" 
+                                class="ml-4 w-8 h-8 rounded-full bg-red-500 transition-all duration-300 shadow-md"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="flex-grow">
+                        <label class="block mb-2 text-sm font-bold text-gray-700">Password 3:</label>
+                        <div class="flex items-center">
+                            <input 
+                                type="text" 
+                                id="password3" 
+                                class="w-full border-2 border-gray-300 p-3 rounded-lg 
+                                       focus:outline-none focus:ring-2 focus:ring-green-400 
+                                       font-['Courier_Prime'] text-lg transition-all duration-300
+                                       hover:scale-105"
+                                placeholder="Enter third password"
+                            >
+                            <div 
+                                id="light3" 
+                                class="ml-4 w-8 h-8 rounded-full bg-red-500 transition-all duration-300 shadow-md"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confetti canvas -->
+    <canvas id="confettiCanvas" class="fixed pointer-events-none inset-0 z-60 hidden"></canvas>
+    
+    <!-- Win Message -->
+    <div 
+        id="winMessage" 
+        class="hidden fixed inset-0 bg-green-100/90 z-50 flex items-center justify-center"
+    >
+        <div class="bg-white p-16 rounded-3xl shadow-2xl border-8 border-green-500 
+                    text-center text-6xl font-['Bangers'] text-green-600 
+                    w-11/12 max-w-4xl transform rotate-3 
+                    animate-bounce-full animate-scale-in space-y-4">
+            <div class="animate-bounce-full">🎉 Congratulations! 🍕</div>
+            <div class="text-4xl animate-bounce-full">You Won the Great Pizza Hunt!</div>
+            <div id="winTimestamp" class="text-2xl text-gray-600 mt-4"></div>
+            <div id="winUsername" class="text-3xl text-green-500 mt-4"></div>
+        </div>
+    </div>
+
+    <!-- Reward Message -->
+    <div 
+        id="rewardMessage" 
+        class="fixed bottom-0 left-0 right-0 transform translate-y-full 
+               bg-green-600 text-white text-center p-4 
+               transition-transform duration-500 ease-in-out z-70"
+    >
+        Take a screenshot and go to Kevin for your reward! 🏆
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div 
+        id="leaderboardModal" 
+        class="hidden fixed inset-0 bg-black/70 z-80 flex items-center justify-center"
+    >
+        <div class="bg-white p-8 rounded-2xl shadow-2xl border-4 border-green-600 
+                    w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-4xl font-['Bangers'] text-green-600">🏆 Leaderboard 🏆</h2>
+                <button 
+                    id="refreshLeaderboard" 
+                    class="px-4 py-2 bg-blue-500 text-white rounded-lg 
+                           hover:bg-blue-600 transition-colors duration-300"
+                >
+                    🔄 Refresh
+                </button>
+            </div>
+            
+            <div id="leaderboardLoading" class="text-center py-8">
+                Loading leaderboard data...
+            </div>
+            
+            <div id="leaderboardError" class="hidden text-center py-8 text-red-500">
+                Error loading leaderboard data. Please try again.
+            </div>
+            
+            <div id="leaderboardContent" class="hidden">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-green-100">
+                            <th class="p-2 text-left border border-green-200">#</th>
+                            <th class="p-2 text-left border border-green-200">Name</th>
+                            <th class="p-2 text-left border border-green-200">Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Leaderboard entries will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button 
+                    id="closeLeaderboard" 
+                    class="px-6 py-2 bg-gray-500 text-white rounded-lg 
+                           hover:bg-gray-600 transition-colors duration-300"
+                >
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

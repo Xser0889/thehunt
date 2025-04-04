@@ -1,0 +1,67 @@
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes bounce-small {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce-full {
+    0%, 100% { transform: scale(1) rotate(3deg); }
+    50% { transform: scale(1.1) rotate(3deg); }
+}
+
+@keyframes scale-in {
+    0% { transform: scale(0.5) rotate(3deg); opacity: 0; }
+    100% { transform: scale(1) rotate(3deg); opacity: 1; }
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animated-gradient {
+    background: linear-gradient(45deg, white, #ecfccb, #86efac, white);
+    background-size: 400% 400%;
+    animation: gradient-animation 8s ease infinite;
+}
+
+.animate-shake {
+    animation: shake 0.5s;
+}
+
+.animate-bounce-small {
+    animation: bounce-small 0.3s;
+}
+
+.animate-bounce-full {
+    animation: bounce-full 1s infinite;
+}
+
+.animate-scale-in {
+    animation: scale-in 0.5s ease-out;
+}
+
+/* Custom z-index values */
+.z-60 {
+    z-index: 60;
+}
+
+.z-70 {
+    z-index: 70;
+}
+
+.z-80 {
+    z-index: 80;
+}
