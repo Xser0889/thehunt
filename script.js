@@ -72,6 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (checkCompletion()) {
         showCompletedView();
     }
+    
+    // Add the leaderboard modal animation class
+    const leaderboardModalContent = leaderboardModal.querySelector('div');
+    if (leaderboardModalContent) {
+        leaderboardModalContent.classList.add('leaderboard-content');
+    }
 });
 
 // Track correct passwords
@@ -282,6 +288,59 @@ async function submitToGoogleSheets(username, timestamp) {
     }
 }
 
+// Leaderboard animations
+function openLeaderboard() {
+    // First make it visible but with 0 opacity
+    leaderboardModal.style.display = 'flex';
+    leaderboardModal.style.opacity = '0';
+    
+    // Get the leaderboard content element
+    const leaderboardContent = leaderboardModal.querySelector('div');
+    if (leaderboardContent) {
+        leaderboardContent.style.transform = 'scale(0.8) translateY(-50px)';
+        leaderboardContent.style.opacity = '0';
+    }
+    
+    // Animate the background fade in
+    setTimeout(() => {
+        leaderboardModal.style.opacity = '1';
+        
+        // Then animate the content bouncing in
+        if (leaderboardContent) {
+            setTimeout(() => {
+                leaderboardContent.style.transform = 'scale(1) translateY(0)';
+                leaderboardContent.style.opacity = '1';
+            }, 200);
+        }
+    }, 50);
+}
+
+function closeLeaderboardWithAnimation() {
+    // Get the leaderboard content element
+    const leaderboardContent = leaderboardModal.querySelector('div');
+    
+    // First animate the content bouncing out
+    if (leaderboardContent) {
+        leaderboardContent.style.transform = 'scale(0.8) translateY(50px)';
+        leaderboardContent.style.opacity = '0';
+    }
+    
+    // Then fade out the background
+    setTimeout(() => {
+        leaderboardModal.style.opacity = '0';
+        
+        // Finally hide the modal
+        setTimeout(() => {
+            leaderboardModal.style.display = 'none';
+            
+            // Reset the transform for next opening
+            if (leaderboardContent) {
+                leaderboardContent.style.transform = 'scale(0.8) translateY(-50px)';
+            }
+        }, 300);
+    }, 200);
+}
+
 // Fetch leaderboard data from Google Sheets
 async function fetchLeaderboardData() {
     try {
@@ -461,13 +520,14 @@ rewardMessage.addEventListener('click', function() {
 
 // Leaderboard toggle button
 leaderboardToggle.addEventListener('click', function() {
-    leaderboardModal.classList.remove('hidden');
+    // Use animation to open leaderboard
+    openLeaderboard();
     fetchLeaderboardData(); // Load leaderboard data when opened
 });
 
 // Close leaderboard button
 closeLeaderboard.addEventListener('click', function() {
-    leaderboardModal.classList.add('hidden');
+    closeLeaderboardWithAnimation();
 });
 
 // Refresh leaderboard button
@@ -478,6 +538,6 @@ refreshLeaderboard.addEventListener('click', function() {
 // Close leaderboard when clicking outside the modal content
 leaderboardModal.addEventListener('click', function(event) {
     if (event.target === this) {
-        this.classList.add('hidden');
+        closeLeaderboardWithAnimation();
     }
 });
