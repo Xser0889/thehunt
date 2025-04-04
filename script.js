@@ -8,6 +8,37 @@ const passwords = {
 // Google Sheets Web App URL 
 const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzTsEdnS-aBXo8dT0morqDiYsItCr-S0Jv1p-272FGsL7chemr_ICrSc36ESNYyarhSXQ/exec';
 
+// Check if user has already completed the challenge
+function checkCompletion() {
+    return localStorage.getItem('pizzaHuntCompleted') === 'true';
+}
+
+// Set user as completed
+function setAsCompleted(username) {
+    localStorage.setItem('pizzaHuntCompleted', 'true');
+    localStorage.setItem('pizzaHuntUsername', username || 'Anonymous Player');
+    localStorage.setItem('pizzaHuntCompletionTime', new Date().toLocaleString());
+}
+
+// Function to show only title and leaderboard for completed users
+function showCompletedView() {
+    // Hide the password inputs section
+    const inputsContainer = document.querySelector('.space-y-4');
+    const usernameContainer = document.querySelector('.mb-6');
+    
+    if (inputsContainer) inputsContainer.style.display = 'none';
+    if (usernameContainer) usernameContainer.style.display = 'none';
+    
+    // Show a completed message
+    const mainContainer = document.querySelector('.bg-white/80.p-8');
+    if (mainContainer) {
+        const completedMsg = document.createElement('div');
+        completedMsg.className = 'text-center py-4 text-green-600 font-bold';
+        completedMsg.textContent = `Challenge already completed by ${localStorage.getItem('pizzaHuntUsername')} on ${localStorage.getItem('pizzaHuntCompletionTime')}`;
+        mainContainer.appendChild(completedMsg);
+    }
+}
+
 // Get input and light elements
 const inputs = {
     password1: document.getElementById('password1'),
@@ -35,6 +66,13 @@ const leaderboardLoading = document.getElementById('leaderboardLoading');
 const leaderboardError = document.getElementById('leaderboardError');
 const leaderboardContent = document.getElementById('leaderboardContent');
 const leaderboardBody = document.getElementById('leaderboardBody');
+
+// Check if user has already completed the challenge when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    if (checkCompletion()) {
+        showCompletedView();
+    }
+});
 
 // Track correct passwords
 const correctPasswords = {
@@ -387,6 +425,9 @@ Object.keys(inputs).forEach(key => {
             // Set username and timestamp in the win message
             winTimestamp.textContent = formattedDateTime;
             winUsername.textContent = username;
+
+            // Save completion status to localStorage
+            setAsCompleted(username);
 
             // Submit data to Google Sheets
             submitToGoogleSheets(username, formDateTime);
