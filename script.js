@@ -6,7 +6,7 @@ const passwords = {
 };
 
 // Google Sheets Web App URL 
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzDlJeJpCOiVnQhMV5VH-BycKBUTf_EnkkQBrdW8Xpe32Dl56Jru_LLsePSGI1wtvvpoQ/exec';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzTsEdnS-aBXo8dT0morqDiYsItCr-S0Jv1p-272FGsL7chemr_ICrSc36ESNYyarhSXQ/exec';
 
 // Get input and light elements
 const inputs = {
