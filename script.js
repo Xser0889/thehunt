@@ -267,6 +267,7 @@ async function fetchLeaderboardData() {
 }
 
 // Display leaderboard data
+// Display leaderboard data function with improved date parsing
 function displayLeaderboardData(data) {
     // Clear previous entries
     leaderboardBody.innerHTML = '';
@@ -281,11 +282,58 @@ function displayLeaderboardData(data) {
         `;
         leaderboardBody.appendChild(row);
     } else {
-        // Sort by timestamp (newest first)
-        data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        // Convert timestamp strings to standardized format before sorting
+        const processedData = data.map(entry => {
+            // First try to parse as ISO format
+            let dateObj;
+            try {
+                // Try to extract date components
+                const parts = entry.timestamp.split(/[,\s:]/);
+                // Remove any non-digit characters and ensure consistent parts
+                const cleanParts = parts.map(p => p.trim()).filter(p => p);
+                
+                // If timestamp includes month name, convert to more standardized format
+                if (isNaN(parseInt(cleanParts[0]))) {
+                    // For format like "April 3, 2025, 10:30:45 AM"
+                    const monthNames = ["January", "February", "March", "April", "May", "June",
+                                      "July", "August", "September", "October", "November", "December"];
+                    const monthIndex = monthNames.findIndex(m => entry.timestamp.includes(m));
+                    
+                    if (monthIndex !== -1) {
+                        // Extract year, day, hour, minute, second
+                        const dateMatch = entry.timestamp.match(/(\d{4})|(\d{1,2}),|(\d{1,2}):(\d{1,2}):(\d{1,2})/g);
+                        if (dateMatch) {
+                            const dateParts = dateMatch.map(p => parseInt(p.replace(/[,:]/g, '')));
+                            // Create date object (months are 0-indexed in JS Date)
+                            dateObj = new Date(dateParts[0], monthIndex, dateParts[1], 
+                                             dateParts[2], dateParts[3], dateParts[4]);
+                        }
+                    }
+                }
+                
+                // Fallback to direct parsing if the above didn't work
+                if (!dateObj || isNaN(dateObj.getTime())) {
+                    dateObj = new Date(entry.timestamp);
+                }
+                
+                // Final fallback - use timestamp string for sorting if date is invalid
+                if (isNaN(dateObj.getTime())) {
+                    return { ...entry, sortableDate: entry.timestamp };
+                }
+                
+                return { ...entry, sortableDate: dateObj.getTime() };
+            } catch (e) {
+                console.error("Error parsing date:", e);
+                // If all parsing fails, keep original entry with lowest sort priority
+                return { ...entry, sortableDate: 0 };
+            }
+        });
+        
+        // Sort by sortableDate (newest first)
+        processedData.sort((a, b) => b.sortableDate - a.sortableDate);
         
         // Create rows for each entry
-        data.forEach((entry, index) => {
+        processedData.forEach((entry, index) => {
             const row = document.createElement('tr');
             row.className = index % 2 === 0 ? 'bg-white' : 'bg-green-50';
             row.innerHTML = `
@@ -364,7 +412,7 @@ Object.keys(inputs).forEach(key => {
             // Get current date and time
             const now = new Date();
             const formattedDateTime = now.toLocaleString('en-US', {
-                timeZone: 'America/Monterrey',
+                //timeZone: 'America/Monterrey',
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
@@ -376,7 +424,7 @@ Object.keys(inputs).forEach(key => {
 
             const nowdate = new Date();
             const formDateTime = nowdate.toLocaleString('en-US', {
-                timeZone: 'America/Monterrey',
+                //timeZone: 'America/Monterrey',
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric', 
