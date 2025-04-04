@@ -31,6 +31,81 @@
     }
 }
 
+/* winner banner */
+.winner-glow {
+    box-shadow: 0 0 15px #f59e0b, 0 0 30px #f59e0b, 0 0 45px rgba(245, 158, 11, 0.3);
+    animation: glow-pulse 3s infinite alternate, glow-rotate 6s infinite linear;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes glow-pulse {
+    0% {
+        box-shadow: 0 0 20px #f59e0b, 0 0 40px #f59e0b, 0 0 45px rgba(245, 158, 11, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 50px #f59e0b, 0 0 80px #f59e0b, 0 0 70px rgba(245, 158, 11, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 30px #f59e0b, 0 0 60px #f59e0b, 0 0 60px rgba(245, 158, 11, 0.4);
+    }
+}
+
+.winner-glow::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        transparent, 
+        transparent, 
+        transparent, 
+        #f59e0b
+    );
+    animation: rotate-border 4s linear infinite;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.winner-glow::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: white;
+    border-radius: 0.6rem;
+    z-index: -1;
+}
+
+@keyframes rotate-border {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#firstWinnerName {
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+    animation: text-glow-pulse 2s infinite alternate;
+    word-break: break-word;
+    position: relative;
+}
+
+@keyframes text-glow-pulse {
+    0% {
+        text-shadow: 0 0 10px rgba(245, 158, 11, 0.7), 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(255, 208, 0, 0.9), 0 0 25px rgba(255, 208, 0, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 12px rgba(245, 158, 11, 0.8), 0 0 22px rgba(245, 158, 11, 0.4);
+    }
+}
+
 /* Leaderboard animations */
 #leaderboardModal {
     transition: opacity 0.3s ease-in-out;
@@ -63,7 +138,6 @@
     animation: scale-in 0.5s ease-out;
 }
 
-/* Custom z-index values */
 .z-60 {
     z-index: 60;
 }
