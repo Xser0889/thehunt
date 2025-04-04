@@ -31,6 +31,16 @@
     }
 }
 
+/* Leaderboard animations */
+#leaderboardModal {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.leaderboard-content {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                opacity 0.3s ease-in-out;
+}
+
 .animated-gradient {
     background: linear-gradient(45deg, white, #ecfccb, #86efac, white);
     background-size: 400% 400%;
