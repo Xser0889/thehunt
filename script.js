@@ -66,6 +66,9 @@ const leaderboardLoading = document.getElementById('leaderboardLoading');
 const leaderboardError = document.getElementById('leaderboardError');
 const leaderboardContent = document.getElementById('leaderboardContent');
 const leaderboardBody = document.getElementById('leaderboardBody');
+const firstWinnerBanner = document.getElementById('firstWinnerBanner');
+const firstWinnerName = document.getElementById('firstWinnerName');
+const firstWinnerTime = document.getElementById('firstWinnerTime');
 
 // Check if user has already completed the challenge when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -73,7 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
         showCompletedView();
     }
     
-    // Add the leaderboard modal animation clas
+    // Fetch and display the first winner
+    fetchFirstWinner();
 });
 
 // Track correct passwords
@@ -338,6 +342,36 @@ function closeLeaderboardWithAnimation() {
     }, 200);
 }
 
+// Fetch and display the first winner
+async function fetchFirstWinner() {
+    try {
+        const response = await fetch(`${GOOGLE_SHEETS_URL}?action=getLeaderboard`);
+        const data = await response.json();
+        
+        if (data && Array.isArray(data) && data.length > 0) {
+            // The first entry is the first winner (assuming data is sorted by timestamp)
+            const firstWinner = data[0];
+            
+            // Display the first winner
+            firstWinnerName.textContent = firstWinner.username;
+            firstWinnerTime.textContent = firstWinner.timestamp;
+            
+            // Show the banner
+            firstWinnerBanner.classList.remove('hidden');
+            
+            return true;
+        } else {
+            // No winners yet
+            firstWinnerBanner.classList.add('hidden');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error fetching first winner data:', error);
+        firstWinnerBanner.classList.add('hidden');
+        return false;
+    }
+}
+
 // Fetch leaderboard data from Google Sheets
 async function fetchLeaderboardData() {
     try {
@@ -348,25 +382,36 @@ async function fetchLeaderboardData() {
         
         if (data && Array.isArray(data)) {
             displayLeaderboardData(data);
+            
+            // Also update the first winner banner
+            if (data.length > 0) {
+                const firstWinner = data[0];
+                firstWinnerName.textContent = firstWinner.username;
+                firstWinnerTime.textContent = firstWinner.timestamp;
+                firstWinnerBanner.classList.remove('hidden');
+            } else {
+                firstWinnerBanner.classList.add('hidden');
+            }
+            
             return true;
         } else {
             showLeaderboardError();
+            firstWinnerBanner.classList.add('hidden');
             return false;
         }
     } catch (error) {
         console.error('Error fetching leaderboard data:', error);
         showLeaderboardError();
+        firstWinnerBanner.classList.add('hidden');
         return false;
     }
 }
 
 // Display leaderboard data
 function displayLeaderboardData(data) {
-    // Clear previous entries
     leaderboardBody.innerHTML = '';
     
     if (data.length === 0) {
-        // No entries yet
         const row = document.createElement('tr');
         row.innerHTML = `
             <td colspan="3" class="p-4 text-center text-gray-500 border border-green-200">
@@ -375,8 +420,6 @@ function displayLeaderboardData(data) {
         `;
         leaderboardBody.appendChild(row);
     } else {
-        // No need to sort - the data is already sorted by the server
-        // Just display the entries in the order they were received
         
         data.forEach((entry, index) => {
             const row = document.createElement('tr');
@@ -416,33 +459,27 @@ Object.keys(inputs).forEach(key => {
         const inputValue = this.value.toLowerCase().trim();
         
         if (inputValue === passwords[key]) {
-            // Update input border
             this.classList.remove('border-gray-300', 'border-red-500');
             this.classList.add('border-green-500');
-            
-            // Add bounce animation for correct input
             this.classList.add('animate-bounce-small');
             setTimeout(() => {
                 this.classList.remove('animate-bounce-small');
             }, 300);
             
-            // Update light color
+
             lights[key].classList.remove('bg-red-500');
             lights[key].classList.add('bg-green-500');
             
             correctPasswords[key] = true;
         } else {
-            // Reset input border
+
             this.classList.remove('border-green-500');
             this.classList.add('border-red-500');
-            
-            // Add shake animation for incorrect input
             this.classList.add('animate-shake');
             setTimeout(() => {
                 this.classList.remove('animate-shake');
             }, 500);
-            
-            // Reset light color
+
             lights[key].classList.remove('bg-green-500');
             lights[key].classList.add('bg-red-500');
             
@@ -498,6 +535,11 @@ Object.keys(inputs).forEach(key => {
                     // Wait another 3 seconds before showing reward message
                     setTimeout(() => {
                         rewardMessage.style.transform = 'translateY(0)';
+                        
+                        // After submission, refresh the first winner banner
+                        setTimeout(() => {
+                            fetchFirstWinner();
+                        }, 2000);
                     }, 3000);
                 }, 500);
             }, 800);
